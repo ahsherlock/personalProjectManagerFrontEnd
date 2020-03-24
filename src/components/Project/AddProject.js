@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 class AddProject extends Component {
   constructor() {
     super();
+
     this.state = {
       projectName: '',
       projectIdentifier: '',
@@ -10,18 +11,33 @@ class AddProject extends Component {
       start_date: '',
       end_date: ''
     };
+
     this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
+
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    const newProject = {
+      projectName: this.state.projectName,
+      projectIdentifier: this.state.projectIdentifier,
+      description: this.state.description,
+      start_date: this.state.start_date,
+      end_date: this.state.end_date
+    };
+
+    console.log(newProject);
   }
 
   render() {
     return (
       <div>
         {
-          //LIST OF SHIIIIIIT TODO
-          // check name atribute of input fields
+          //check name attribute input fields
           //create constructor
           //set state
           //set value on input fields
@@ -30,20 +46,20 @@ class AddProject extends Component {
           //bind on constructor
           //check state change in the react extension
         }
-        
+
         <div className="project">
           <div className="container">
             <div className="row">
               <div className="col-md-8 m-auto">
                 <h5 className="display-4 text-center">Create Project form</h5>
                 <hr />
-                <form>
+                <form onSubmit={this.onSubmit}>
                   <div className="form-group">
                     <input
                       type="text"
-                      class="form-control form-control-lg "
+                      className="form-control form-control-lg "
                       placeholder="Project Name"
-                      input="projectName"
+                      name="projectName"
                       value={this.state.projectName}
                       onChange={this.onChange}
                     />
@@ -58,15 +74,14 @@ class AddProject extends Component {
                       onChange={this.onChange}
                     />
                   </div>
-
                   <div className="form-group">
                     <textarea
                       className="form-control form-control-lg"
                       placeholder="Project Description"
-                      input="description"
+                      name="description"
                       value={this.state.description}
                       onChange={this.onChange}
-                    ></textarea>
+                    />
                   </div>
                   <h6>Start Date</h6>
                   <div className="form-group">
@@ -102,4 +117,5 @@ class AddProject extends Component {
     );
   }
 }
+
 export default AddProject;
