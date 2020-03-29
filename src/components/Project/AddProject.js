@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
-import {createProject} from "../../actions/projectActions";
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createProject } from '../../actions/projectActions';
 
 class AddProject extends Component {
   constructor() {
@@ -12,11 +12,21 @@ class AddProject extends Component {
       projectIdentifier: '',
       description: '',
       start_date: '',
-      end_date: ''
+      end_date: '',
+      errors: {}
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  //Life Cycle Hook
+  //When we have errors because submit failed, new props (errors obj) will be sent
+  //This fills the error object in the state with the errors
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
   }
 
   onChange(e) {
@@ -33,10 +43,12 @@ class AddProject extends Component {
       end_date: this.state.end_date
     };
 
-    this.props.createProject(newProject, this.props.history)
+    this.props.createProject(newProject, this.props.history);
   }
 
   render() {
+    const { errors } = this.state;
+
     return (
       <div>
         {
@@ -66,7 +78,9 @@ class AddProject extends Component {
                       value={this.state.projectName}
                       onChange={this.onChange}
                     />
+                    <p>{errors.projectName}</p>
                   </div>
+
                   <div className="form-group">
                     <input
                       type="text"
@@ -121,5 +135,17 @@ class AddProject extends Component {
   }
 }
 
-AddProject.propTypes = {createProject : PropTypes.func.isRequired}
-export default connect(null,{createProject})(AddProject);
+AddProject.propTypes = {
+  //ensures that the prop is of the right type. create = func errors = obj
+  createProject: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { createProject }
+)(AddProject);
